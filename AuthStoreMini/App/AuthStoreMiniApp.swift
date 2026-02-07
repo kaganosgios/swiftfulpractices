@@ -12,14 +12,16 @@ import Combine
 struct AuthStoreMiniApp: App {
     
     @StateObject var coordinator = AppCoordinator()
+    @StateObject var networkMonitor = NetworkMonitor.shared
     var body: some Scene {
         WindowGroup {
             if coordinator.isAuthenticated{
-               ProductListView()
+               MainTabView()
             }else{
                 LoginView()
             }
         }
         .environmentObject(coordinator)
+        .environmentObject(networkMonitor)
     }
 }

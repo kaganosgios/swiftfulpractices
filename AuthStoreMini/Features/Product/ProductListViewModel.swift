@@ -16,21 +16,39 @@ struct Product: Decodable, Identifiable {
 
 final class ProductListViewModel: ObservableObject {
     @Published var products: [Product] = []
-    
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+
     func fetchProducts() {
+        isLoading = true
+        errorMessage = nil
+
         let url = URL(string: "https://dummyjson.com/products")!
-        
-        URLSession.shared.dataTask(with: url){ data, _, _ in
-            guard let data else { return }
-            let decoded = try? JSONDecoder().decode(Response.self, from: data)
-            
-            DispatchQueue.main.async{
-                self.products = decoded?.products ?? []
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+
+                if let error {
+                    self.errorMessage = error.localizedDescription
+                    return
+                }
+
+                guard let data else {
+                    self.errorMessage = "No data received"
+                    return
+                }
+
+                do {
+                    let decoded = try JSONDecoder().decode(Response.self, from: data)
+                    self.products = decoded.products
+                } catch {
+                    self.errorMessage = "Failed to decode data"
+                }
             }
-            
         }.resume()
     }
-    
+
     struct Response: Decodable {
         let products: [Product]
     }

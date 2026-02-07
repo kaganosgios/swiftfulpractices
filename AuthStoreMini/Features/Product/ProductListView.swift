@@ -11,10 +11,20 @@ import SwiftUI
 struct ProductListView: View {
     @StateObject var vm = ProductListViewModel()
     var body: some View {
-        VStack{
+        ZStack{
             List(vm.products) { product in
                 Text(product.title)
                     .padding()
+            }
+            
+            if vm.isLoading{
+                ProgressView()
+            }
+            if let errorMessage = vm.errorMessage{
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+                
             }
         }
         .onAppear{

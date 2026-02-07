@@ -12,4 +12,15 @@ final class AuthManager {
     private init() {}
     
     var token: String?
+    
+    func logout() {
+        TokenStore.shared.token = nil
+    }
+}
+
+final class TokenStore{
+    static let shared = TokenStore()
+    private init() {}
+    
+    var token : String?
 }
