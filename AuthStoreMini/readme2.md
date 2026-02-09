@@ -1,3 +1,4 @@
+
 Proje Rehberi – Ne, Nerede, Neden?
 
 Bu proje; basit bir kimlik doğrulama akışı (login + token yönetimi) ve farklı uç noktalara ağ istekleri atan bir yapı içerir. Amacı, hem klasik GCD yaklaşımı hem de modern Swift Concurrency (async/await) ile ağ işlemlerini göstermek ve auth gerektiren/gerektirmeyen endpoint’leri ayırt ederek token kullanımını örneklemektir.

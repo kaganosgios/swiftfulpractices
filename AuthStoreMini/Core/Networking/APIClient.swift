@@ -7,9 +7,13 @@
 
 import Foundation
 
-struct APIClient {
+protocol APIClientProtocol {
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
+}
 
-    static func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
+final class APIClient: APIClientProtocol {
+
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         guard let url = endpoint.url else {
             throw APIError.invalidURL
         }
@@ -30,3 +34,6 @@ struct APIClient {
     }
 }
 
+extension APIClientProtocol {
+    static var live: APIClientProtocol { APIClient() }
+}

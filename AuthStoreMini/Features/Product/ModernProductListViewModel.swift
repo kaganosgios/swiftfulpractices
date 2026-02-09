@@ -16,12 +16,18 @@ final class ModernProductListViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
 
+    private let apiClient: APIClientProtocol
+
+    init(apiClient: APIClientProtocol = APIClient.live) {
+        self.apiClient = apiClient
+    }
+
     func fetchProducts() async {
         isLoading = true
         errorMessage = nil
 
         do {
-            let response: ProductResponse = try await APIClient.request(.products)
+            let response: ProductResponse = try await apiClient.request(.products)
             products = response.products
         } catch {
             errorMessage = error.localizedDescription

@@ -11,6 +11,11 @@ import Combine
 
 @MainActor
 final class ProfileViewModel: ObservableObject {
+    private let apiClient: APIClient
+    
+    init(apiClient: APIClient = APIClient()) {
+        self.apiClient = apiClient
+    }
 
     @Published var username: String = ""
     @Published var isLoading = false
@@ -21,7 +26,7 @@ final class ProfileViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            let profile: ProfileResponse = try await APIClient.request(.profile)
+            let profile: ProfileResponse = try await apiClient.request(.profile)
             username = profile.username
         } catch {
             errorMessage = error.localizedDescription
@@ -38,3 +43,4 @@ final class ProfileViewModel: ObservableObject {
 struct ProfileResponse: Decodable {
     let username: String
 }
+
